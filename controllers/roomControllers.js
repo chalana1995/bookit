@@ -1,9 +1,12 @@
-import Room from "../models/rooms";
+import Room, { geoSearch } from "../models/rooms";
 import ErrorHandler from "../utils/errorHandler";
 import catchAsyncError from "../middlewares/catchAsyncError";
+import ApiFeature from "../utils/apiFeature";
 
 const getAllRooms = catchAsyncError(async (req, res) => {
-  const rooms = await Room.find();
+  const apiFeature = new ApiFeature(Room.find(), req.query).search();
+
+  const rooms = await apiFeature.query;
 
   res.status(200).json({
     success: true,
