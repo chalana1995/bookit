@@ -20,10 +20,18 @@ class ApiFeature {
   filter() {
     const queryCopy = { ...this.queryStr };
 
-    const removeField = ["location"];
+    const removeField = ["location", "page"];
     removeField.forEach((el) => delete queryCopy(el));
 
     this.query = this.query.filter(queryCopy);
+    return this;
+  }
+
+  pagination(resPerPage) {
+    const currentPage = Number(this.queryStr.page) || 1;
+    const skip = resPerPage * (currentPage - 1);
+
+    this.query = this.query.limit(currentPage).skip(skip);
     return this;
   }
 }
